@@ -39,7 +39,7 @@ object SessionCount {
         val sessionIDs = rdd.map {
           keyVal =>
             val eventFields = keyVal.value().split(",")
-            val event = new EventSchema(eventFields(0).toLong, eventFields(1), eventFields(2).toLong, eventFields(3))
+            val event = new EventSchema(eventFields(0).toLong, eventFields(1), eventFields(2).toLong, eventFields(3), eventFields(4))
             event.sessionID
         }
         val numSessions = sessionIDs.countApproxDistinct()

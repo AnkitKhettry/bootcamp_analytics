@@ -37,12 +37,14 @@ object KafkaWriter {
 
     val eventTypes = List("pdp_view", "screen_load", "app_launch", "add_to_collection", "add_to_cart")
     val brands = List("nike", "adidas", "puma", "roadster")
+    val os = List("android", "iOS", "web")
 
     new EventSchema(
       System.currentTimeMillis(),
       eventTypes((Math.random()*5).toInt),      //one of the possible 5 event types
       (Math.random()*100).toLong,               //session ID between 0 and 99
-      brands((Math.random()*4).toInt)           //one of the 4 brands
+      brands((Math.random()*4).toInt),          //one of the 4 brands
+      os((Math.random()*3).toInt)               //One of "android", "iOS", "web"
     )
   }
 }

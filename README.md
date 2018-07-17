@@ -7,7 +7,9 @@ Steps:
 1. Clone the repo : https://github.com/AnkitKhettry/bootcamp_analytics.git
 2. Goto File -> Project Structure -> Platform Settings -> SDK -> Add 1.8s, remove all others.
 3. Goto File -> Project Structure -> Libraries -> + Scala SDK -> Add 2.11.7, remove all others. If you don't have, download:https://www.scala-lang.org/download/2.11.7.html
-4. Add pom.xml to your maven projects. Do a mvn clean and then mvn install. Wait for imports.
+4. Add pom.xml to your maven projects. 
+5. Do a mvn clean and then mvn install. Wait for imports.
+6. Mark src/main/scala directory as sources root.
 
 Exercise 1:
 1. Listen to code walkthrough
@@ -15,4 +17,4 @@ Exercise 1:
 3. Run SessionCount.main
 
 Exercise 2:
-Create a new feature branch on your local system, and implement a spark streaming application which would find the number of 
+Create a new feature branch on your local system, and implement a spark streaming application which would find the most popular brand in the last 5 seconds. 
