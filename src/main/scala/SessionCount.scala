@@ -43,7 +43,7 @@ object SessionCount {
             event.sessionID
         }
         val numSessions = sessionIDs.countApproxDistinct()
-        println("Number of sessions in the last 5 seconds : "+numSessions)
+        println("Number of active sessions in the last 5 seconds : "+numSessions)
     }
 
     streamingContext.start()
