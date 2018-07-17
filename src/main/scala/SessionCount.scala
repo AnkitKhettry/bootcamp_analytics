@@ -14,6 +14,8 @@ object SessionCount {
 
     val sparkContext = new SparkContext(conf)
 
+    sparkContext.setLogLevel("ERROR")
+
     val streamingContext = new StreamingContext(sparkContext, Seconds(5))
 
     val kafkaParams = Map[String, Object](
@@ -34,12 +36,13 @@ object SessionCount {
     stream.foreachRDD{
 
       rdd =>
-        val eventsRdd = rdd.map {
+        val sessionIDs = rdd.map {
           keyVal =>
             val eventFields = keyVal.value().split(",")
-            new EventSchema(eventFields(0).toLong, eventFields(1), eventFields(2).toLong, eventFields(3))
+            val event = new EventSchema(eventFields(0).toLong, eventFields(1), eventFields(2).toLong, eventFields(3))
+            event.sessionID
         }
-        val numSessions = eventsRdd.groupBy(event => event.sessionID).count
+        val numSessions = sessionIDs.countApproxDistinct()
         println("Number of sessions in the last 5 seconds : "+numSessions)
     }
 
