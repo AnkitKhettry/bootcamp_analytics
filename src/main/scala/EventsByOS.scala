@@ -4,7 +4,7 @@ import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, Loca
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
-object SessionCount {
+object EventsByOS {
 
 
   def main(args: Array[String]): Unit = {
@@ -33,17 +33,21 @@ object SessionCount {
       ConsumerStrategies.Subscribe[String, String](topicSet, kafkaParams)
     )
 
-    stream.foreachRDD{
+    stream.foreachRDD {
 
       rdd =>
-        val sessionIDs = rdd.map {
+        rdd.map {
           keyVal =>
             val eventFields = keyVal.value().split(",")
             val event = new EventSchema(eventFields(0).toLong, eventFields(1), eventFields(2).toLong, eventFields(3), eventFields(4))
-            event.sessionID
+            (event.os, 1)
+        }.reduceByKey(_ + _).foreach {
+          countForOs =>
+            val os = countForOs._1
+            val count = countForOs._2
+            println("Events for os "+os+" : "+count)
         }
-        val numSessions = sessionIDs.countApproxDistinct()
-        println("Number of active sessions in the last 5 seconds : "+numSessions)
+        println
     }
 
     streamingContext.start()
