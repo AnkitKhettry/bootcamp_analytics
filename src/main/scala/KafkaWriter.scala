@@ -23,9 +23,10 @@ object KafkaWriter {
 
 
     //pushes ten events every second for 10 minutes
-    (1 to 6000).foreach  {
+    (1 to 6000).foreach {
       idx =>
-        val record = new ProducerRecord(topic, "key"+idx, randomEvent.toString)
+        val record = new ProducerRecord(topic, "key" + idx, randomEvent.toString)
+        println(record)
         producer.send(record)
         Thread.sleep(100)
     }
@@ -41,10 +42,10 @@ object KafkaWriter {
 
     new EventSchema(
       System.currentTimeMillis(),
-      eventTypes((Math.random()*5).toInt),      //one of the possible 5 event types
-      (Math.random()*100).toLong,               //session ID between 0 and 99
-      brands((Math.random()*4).toInt),          //one of the 4 brands
-      os((Math.random()*3).toInt)               //One of "android", "iOS", "web"
+      eventTypes((Math.random() * 5).toInt), //one of the possible 5 event types
+      (Math.random() * 100).toLong, //session ID between 0 and 99
+      brands((Math.random() * 4).toInt), //one of the 4 brands
+      os((Math.random() * 3).toInt) //One of "android", "iOS", "web"
     )
   }
 }

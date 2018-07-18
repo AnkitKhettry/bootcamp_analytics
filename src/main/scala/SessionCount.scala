@@ -1,8 +1,8 @@
 import CaseClasses.EventSchema
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}
-import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
+import org.apache.spark.{SparkConf, SparkContext}
 
 object SessionCount {
 
@@ -33,7 +33,7 @@ object SessionCount {
       ConsumerStrategies.Subscribe[String, String](topicSet, kafkaParams)
     )
 
-    stream.foreachRDD{
+    stream.foreachRDD {
 
       rdd =>
         val sessionIDs = rdd.map {
@@ -43,7 +43,7 @@ object SessionCount {
             event.sessionID
         }
         val numSessions = sessionIDs.countApproxDistinct()
-        println("Number of active sessions in the last 5 seconds : "+numSessions)
+        println("Number of active sessions in the last 5 seconds : " + numSessions)
     }
 
     streamingContext.start()
