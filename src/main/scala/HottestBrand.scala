@@ -4,7 +4,7 @@ import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, Loca
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.apache.spark.{SparkConf, SparkContext}
 
-object EventsByOS {
+object HottestBrand {
 
 
   def main(args: Array[String]): Unit = {
@@ -37,18 +37,19 @@ object EventsByOS {
     stream.foreachRDD {
 
       rdd =>
-        rdd.map {
-          keyVal =>
-            val eventFields = keyVal.value().split(",")
-            val event = EventSchema(eventFields(0).toLong, eventFields(1), eventFields(2).toLong, eventFields(3), eventFields(4))
-            (event.os, 1)
-        }.reduceByKey(_ + _).foreach {
-          countForOs =>
-            val os = countForOs._1
-            val count = countForOs._2
-            println("Events for os " + os + " : " + count)
-        }
-        println
+        val hottestBrand =
+          rdd.map {
+            keyVal =>
+              val eventFields = keyVal.value().split(",")
+              val event = new EventSchema(eventFields(0).toLong, eventFields(1), eventFields(2).toLong, eventFields(3), eventFields(4))
+              (event.brand, 1)
+          }.reduceByKey(_ + _)
+            .reduce {
+              (a, b) =>
+                if (a._2 > b._2) a else b
+            }._1
+
+        println(hottestBrand)
     }
 
     streamingContext.start()
