@@ -17,4 +17,4 @@ Exercise 1:
 3. Run SessionCount.main
 
 Exercise 2:
-Create a new feature branch on your local system, and implement a spark streaming application which would find the most popular brand in the last 5 seconds. 
+Create a new feature branch on your local system, and implement a spark streaming application which would print the 'hottest brand' in the last 5 seconds.
