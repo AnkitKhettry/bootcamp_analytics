@@ -22,7 +22,8 @@ object EventsByOS {
       "bootstrap.servers" -> "localhost:9092",
       "key.deserializer" -> classOf[StringDeserializer],
       "value.deserializer" -> classOf[StringDeserializer],
-      "group.id" -> "event_consumer_group"
+      "group.id" -> "event_consumer_group",
+      "auto.offset.reset" -> "earliest"
     )
 
     val topicSet = Set("events_topic")
@@ -39,13 +40,13 @@ object EventsByOS {
         rdd.map {
           keyVal =>
             val eventFields = keyVal.value().split(",")
-            val event = new EventSchema(eventFields(0).toLong, eventFields(1), eventFields(2).toLong, eventFields(3), eventFields(4))
+            val event = EventSchema(eventFields(0).toLong, eventFields(1), eventFields(2).toLong, eventFields(3), eventFields(4))
             (event.os, 1)
         }.reduceByKey(_ + _).foreach {
           countForOs =>
             val os = countForOs._1
             val count = countForOs._2
-            println("Events for os "+os+" : "+count)
+            println("Events for os " + os + " : " + count)
         }
         println
     }

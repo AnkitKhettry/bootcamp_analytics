@@ -14,8 +14,8 @@ object KafkaWriter {
     props.put("acks", "1")
 
 
-    KafkaZKUtils.startZookeeper
-    KafkaZKUtils.startKafka
+    KafkaZKUtils.startZookeeper()
+    KafkaZKUtils.startKafka()
 
     val topic = "events_topic"
 
@@ -25,7 +25,7 @@ object KafkaWriter {
     //pushes ten events every second for 10 minutes
     (1 to 6000).foreach {
       idx =>
-        val record = new ProducerRecord(topic, "key" + idx, randomEvent.toString)
+        val record = new ProducerRecord(topic, "key" + idx, randomEvent().toString)
         println(record)
         producer.send(record)
         Thread.sleep(100)
@@ -34,13 +34,13 @@ object KafkaWriter {
     producer.close()
   }
 
-  def randomEvent() = {
+  def randomEvent(): EventSchema = {
 
     val eventTypes = List("pdp_view", "screen_load", "app_launch", "add_to_collection", "add_to_cart")
     val brands = List("nike", "adidas", "puma", "roadster")
     val os = List("android", "iOS", "web")
 
-    new EventSchema(
+    EventSchema(
       System.currentTimeMillis(),
       eventTypes((Math.random() * 5).toInt), //one of the possible 5 event types
       (Math.random() * 100).toLong, //session ID between 0 and 99
